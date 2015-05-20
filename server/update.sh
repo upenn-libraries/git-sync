@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ $# gt 1 ]; then
+if [ $# -gt 1 ]; then
   echo "too many arguments: \"${*}\"" >&2
   exit 1
 fi
