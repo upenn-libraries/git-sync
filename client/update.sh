@@ -3,10 +3,13 @@
 REMOTE_URL=$(git config --get remote.origin.url)
 SSH_CONNECT="${REMOTE_URL%:*}"
 REMOTE_PATH="${REMOTE_URL#*:}"
+REMOTE_UPDATE_SCRIPT="./.git/server-sync/server/update.sh"
 
-ssh "$SSH_CONNECT" "cd "$REMOTE_PATH" && ./.git/server-sync/server/update.sh "${@}"" 
-
-exit
+if [ -z "$SSH_CONNECT" ]; then
+  ( cd "$REMOTE_PATH" && "$REMOTE_UPDATE_SCRIPT" "${@}" )
+else
+  ssh "$SSH_CONNECT" "cd "$REMOTE_PATH" && "$REMOTE_UPDATE_SCRIPT" "${@}"" 
+fi
 
 REMOTE_WORK_BRANCH="origin/work"
 BACKUP_TAG="work_backup"
