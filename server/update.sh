@@ -15,7 +15,7 @@ WORK_BRANCH="work"
 BACKUP_TAG="work_backup"
 COMMIT_MESSAGE="$1"
 if [ -z "$COMMIT_MESSAGE" ]; then
-  if [ "$(git rev-parse "$DEV_BRANCH")" -eq "$(git rev-parse "${WORK_BRANCH}^1")" ]; then
+  if [ "$(git rev-parse "$DEV_BRANCH")" = "$(git rev-parse "${WORK_BRANCH}^1")" ]; then
     die "up-to-date, nothing to do"
   fi
   COMMIT_MESSAGE="update auto-message"
