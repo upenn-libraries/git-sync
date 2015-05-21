@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-SYNC_DIR=$( cd $(dirname $0) && pwd -L )
+SYNC_DIR="$( cd $(dirname $0) && cd ../ && pwd -L )"
 LOCK_DIR="${SYNC_DIR}/lock.d"
 
 die() {
