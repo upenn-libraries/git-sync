@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+SYNC_DIR="$( cd $(dirname $0) && cd ../ && pwd -L )"
+WORK_HEAD_FILE="${SYNC_DIR}/WORK_HEAD"
+
+DEV_BRANCH="$(cat "$WORK_HEAD_FILE")"
+
 die() {
   echo "$1" >&2
   exit 1
@@ -9,7 +14,6 @@ if [ $# -gt 1 ]; then
   die "too many arguments: \"${*}\""
 fi
 
-DEV_BRANCH="dev"
 TMP_BRANCH="tmp"
 WORK_BRANCH="work"
 BACKUP_TAG="work_backup"
