@@ -29,7 +29,14 @@ REMOTE_UPDATE_SCRIPT="sync/server/update.sh"
 if [ -z "$SSH_CONNECT" ]; then
   ( cd "$REMOTE_PATH" && "${GIT_DIR:-./.git}/$REMOTE_UPDATE_SCRIPT" "${@}" ) || die "local remote command failed"
 else
-  ssh "$SSH_CONNECT" "cd "$REMOTE_PATH" && "\${GIT_DIR:-./.git}/$REMOTE_UPDATE_SCRIPT" "${@}"" || die "remote command failed"
+  # escape the arguments
+  declare -a args
+  count=0
+  for arg in "$@"; do
+    args[count]=$(printf '%q' "$arg")
+    count=$((count+1))
+  done
+  ssh "$SSH_CONNECT" "cd "$REMOTE_PATH" && "\${GIT_DIR:-./.git}/$REMOTE_UPDATE_SCRIPT" "${args[@]}"" || die "remote command failed"
 fi
 
 REMOTE_WORK_BRANCH="origin/work"
