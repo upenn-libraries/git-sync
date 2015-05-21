@@ -16,7 +16,7 @@ BACKUP_TAG="work_backup"
 COMMIT_MESSAGE="$1"
 git fetch --all || die "remote fetch failed"
 if [ -z "$COMMIT_MESSAGE" ]; then
-  if [ "$(git log --oneline "${WORK_BRANCH}..${DEV_BRANCH}" | wc -l)" -gt 0 ]; then
+  if [ "$(git log --oneline "${WORK_BRANCH}..${DEV_BRANCH}" | wc -l)" -lt 1 ]; then
     die "up-to-date, nothing to do"
   fi
   COMMIT_MESSAGE="update auto-message"
