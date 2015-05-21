@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 SYNC_DIR=$( cd $(dirname $0) && pwd -L )
-LOCK_DIR="${SYNC_DIR/lock.d}"
+LOCK_DIR="${SYNC_DIR}/lock.d"
 
 die() {
   echo "$1" >&2
