@@ -8,6 +8,8 @@ die() {
 
 WORK_BRANCH="work"
 
+export GIT_WORK_TREE="$( cd ../ && pwd -L )"
+
 git sync lock || die
 branch_name="$(git symbolic-ref HEAD 2>/dev/null)" ||
 branch_name="(unnamed branch)"     # detached HEAD
@@ -16,5 +18,5 @@ if [ "$branch_name" != "$WORK_BRANCH" ]; then
   git sync unlock
   die "on branch \"$branch_name\"; must be on branch ${WORK_BRANCH}"
 fi
-git --work-tree="../" reset --hard || die
+git reset --hard || die
 git sync unlock
