@@ -14,7 +14,7 @@ case "$1" in
   ;;
   client)
     echo "configure for client"
-    git config alias.sync "${GIT_DIR:-./.git}/sync/client/sync.sh"
+    git config alias.sync "!${GIT_DIR:-./.git}/sync/client/sync.sh"
   ;;
   *)
     echo "unrecognized option: $1" >&2
