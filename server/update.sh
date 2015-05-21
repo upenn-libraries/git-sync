@@ -21,6 +21,7 @@ if [ -z "$COMMIT_MESSAGE" ]; then
   fi
   COMMIT_MESSAGE="update auto-message"
 fi
+git sync lock
 git tag -d "$BACKUP_TAG"
 git tag "$BACKUP_TAG"
 git branch "$TMP_BRANCH" "$DEV_BRANCH"
@@ -38,3 +39,4 @@ if [ -n "$1" ]; then
   git checkout "$WORK_BRANCH" || die "failed to checkout $WORK_BRANCH on remote"
 fi
 git branch -d "$TMP_BRANCH" || die "failed to delete $TMP_BRANCH"
+git sync unlock
