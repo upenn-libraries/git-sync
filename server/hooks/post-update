@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+#
+
+git reset --work-tree ../ --hard
+

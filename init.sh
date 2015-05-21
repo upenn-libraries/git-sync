@@ -10,10 +10,11 @@ case "$1" in
   server)
     echo "configure for server"
     git config receive.denyCurrentBranch ignore
+    ln -s ../sync/server/hooks/post-update hooks/post-update
   ;;
   client)
     echo "configure for client"
-    git config alias.sync "${GIT_DIR:-./.git}/sync/client/sync.sh"
+    git config alias.sync "${GIT_DIR:-./.git}/sync/client/sync.sh" || echo failed
   ;;
   *)
     echo "unrecognized option: $1" >&2
