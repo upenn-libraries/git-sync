@@ -16,12 +16,17 @@ BACKUP_TAG="work_backup"
 COMMIT_MESSAGE="$1"
 git fetch --all || die "remote fetch failed"
 git sync lock
-if [ "$(git log --oneline "${WORK_BRANCH}..${DEV_BRANCH}" | wc -l)" -lt 1 ]; then
-  git sync unlock
-  die "up-to-date, nothing to do"
-fi
 if [ -z "$COMMIT_MESSAGE" ]; then
+  if [ "$(git log --oneline "${WORK_BRANCH}..${DEV_BRANCH}" | wc -l)" -lt 1 ]; then
+    git sync unlock
+    die "up-to-date, nothing to do"
+  fi
   COMMIT_MESSAGE="update auto-message"
+else
+  if [ "$(git log --oneline "${WORK_BRANCH}...${DEV_BRANCH}" | wc -l)" -lt 1 ]; then
+    git sync unlock
+    die "up-to-date, nothing to do"
+  fi
 fi
 git tag -d "$BACKUP_TAG"
 git tag "$BACKUP_TAG"
