@@ -14,13 +14,13 @@ TMP_BRANCH="tmp"
 WORK_BRANCH="work"
 BACKUP_TAG="work_backup"
 COMMIT_MESSAGE="$1"
+git fetch --all || die "remote fetch failed"
 if [ -z "$COMMIT_MESSAGE" ]; then
-  if [ "$(git rev-parse "$DEV_BRANCH")" = "$(git rev-parse "${WORK_BRANCH}^1")" ]; then
+  if [ "$(git log --oneline "${DEV_BRANCH}..${WORK_BRANCH}" | wc -l)" -lt 2 ]; then
     die "up-to-date, nothing to do"
   fi
   COMMIT_MESSAGE="update auto-message"
 fi
-git fetch --all || die "remote fetch failed"
 git tag -d "$BACKUP_TAG"
 git tag "$BACKUP_TAG"
 git branch "$TMP_BRANCH" "$DEV_BRANCH"
