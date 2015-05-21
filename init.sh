@@ -10,6 +10,7 @@ case "$1" in
   server)
     echo "configure for server"
     git config receive.denyCurrentBranch ignore
+    git config alias.sync "!${GIT_DIR:-./.git}/sync/server/sync.sh"
     ln -s ../sync/server/hooks/post-update hooks/post-update
   ;;
   client)
