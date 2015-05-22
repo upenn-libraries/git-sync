@@ -25,3 +25,30 @@ Run `./.git/sync/init.sh server`
 Clone your project from your server repository (see above) to the client machine.
 
 Run `./.git/sync/init.sh client`
+
+## Commands
+### Server
+`git sync [lock | unlock]`: locks or unlocks sync functionality from client; enables safe manual git workflow on server
+
+`git sync working-on`: you always have the `work` branch checked out; this command tells you what the corresponding 
+branch is
+
+`git sync checkout [-b] <branchname>`: a wrapper around `git checkout [-b] <branchname>` that takes as it's base 
+the current sync `working-on` branch, as opposed to the checked out branch (which is always the sync work branch).
+Running this command changes the target of the sync work branch to the specified branch (creating a new branch with 
+`git checkout -b` if necessary).
+
+### Client
+`git sync`: with no args, wraps `git commit -am` with a dummy commit message, and `git push origin`, to sync current work
+tree to the server
+
+`git sync update [meaningful commit message]`: remote call to the server pulls in recent changes from the `working-on` 
+branch into the sync work branch, squash-merging the current contents of the sync work branch if necessary, and syncs 
+the new work branch back to the client. Effectively the same as svn up, from the client's perspective. If the optional 
+commit message argument is supplied, the squash-merged contents of the sync work branch are ff-merged into the 
+`working-on` branch, effectively making related changes "permanent"
+
+`git sync checkout [-b] <branchname>`: remote call to server checkout command, allows simple branch workflow to be acheived
+directly from the client
+
+`git sync working-on`: tells you the branch you're working on.
