@@ -32,6 +32,7 @@ checkout() {
   git reset --hard "$ref"
   echo "$ref" > "$WORK_HEAD_FILE"
   git sync unlock
+  echo "$(git sync working-on)"
 }
 
 case "$1" in
