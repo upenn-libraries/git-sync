@@ -13,6 +13,7 @@ die() {
 
 create-work-branch() {
   if git rev-parse "refs/heads/$WORK_BRANCH" >/dev/null 2>&1 || [ "$1" != "server" ]; then
+    git fetch origin
     git --work-tree="../" checkout "$WORK_BRANCH" || die "failed checkout ($PWD)"
   else
     git --work-tree="../" checkout -b "$WORK_BRANCH" || die "failed checkout -b ($PWD)"

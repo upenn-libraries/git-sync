@@ -3,6 +3,7 @@
 SYNC_DIR="$( cd $(dirname $0) && cd ../ && pwd -L )"
 WORK_HEAD_FILE="${SYNC_DIR}/WORK_HEAD"
 WORK_HEAD_FILE_REMOTE="${SYNC_DIR}/WORK_HEAD_REMOTE"
+WORK_BRANCH="work"
 
 die() {
   echo "$1" >&2
@@ -13,8 +14,8 @@ branch_name="$(git symbolic-ref HEAD 2>/dev/null)" ||
 branch_name="(unnamed branch)"     # detached HEAD
 branch_name=${branch_name##refs/heads/}
 
-if [ "$branch_name" != "work" ]; then
-  die "must be on work branch for client sync"
+if [ "$branch_name" != "$WORK_BRANCH" ]; then
+  die "must be on $WORK_BRANCH branch for client sync"
 fi
 
 record-working() {
@@ -31,16 +32,16 @@ update-local() {
   if [ "$1" != "--force" ]; then
     LOCAL_WORK_BRANCH="$(git sync working-on)"
     if [ "$LOCAL_WORK_BRANCH" != "$REMOTE_WORK_BRANCH" ]; then
-      die "unexpected remote work branch ($REMOTE_WORK_BRANCH)! \
+      die "unexpected remote $WORK_BRANCH branch ($REMOTE_WORK_BRANCH)! \
 run \"git sync force-local-update\" \
-to overwrite local work branch (for $LOCAL_WORK_BRANCH)"
+to overwrite local $WORK_BRANCH branch (for $LOCAL_WORK_BRANCH)"
     fi
   fi
   BACKUP_TAG="work_backup"
-  git fetch --all || die "client fetch command failed"
+  git fetch origin || die "client fetch command failed"
   git tag -d "$BACKUP_TAG"
   git tag "$BACKUP_TAG"
-  git reset --keep "$REMOTE_WORK_BRANCH" || die "client \"reset --keep\" command failed"
+  git reset --keep "refs/remotes/origin/$WORK_BRANCH" || die "client \"reset --keep\" command failed"
   echo "$REMOTE_WORK_BRANCH" > "$WORK_HEAD_FILE"
 }
 

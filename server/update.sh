@@ -50,7 +50,7 @@ MERGE_BASE=$(git merge-base "$WORK_BRANCH" "$TMP_BRANCH") || die "failed to get 
 git reset --hard "$MERGE_BASE" || die "remote hard reset failed (merge-base: $MERGE_BASE)"
 git merge --ff-only "$TMP_BRANCH" || die "failed to merge $TMP_BRANCH into $WORK_BRANCH on remote"
 if [ -n "$1" ]; then
-  git checkout "$DEV_BRANCH" || die "remote failed to checkout $DEV_BRANCH"
+  git checkout "${DEV_BRANCH#refs/heads/}" || die "remote failed to checkout $DEV_BRANCH"
   git merge --ff-only "$TMP_BRANCH" || die "failed to merge $TMP_BRANCH into $DEV_BRANCH on remote"
   git checkout "$WORK_BRANCH" || die "failed to checkout $WORK_BRANCH on remote"
 fi
