@@ -16,9 +16,9 @@ checkout() {
   git sync lock
   local ref=
   if [ "$1" = "-b" ]; then
-    ref="$CURRENT_WORK_HEAD"
     shift
-    git branch "$1" "$ref"
+    ref="$1"
+    git branch "$ref" "$CURRENT_WORK_HEAD"
   else
     ref="$(git rev-parse --symbolic-full-name "$1")"
     if [ -z "$ref" ]; then
