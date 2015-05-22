@@ -44,6 +44,9 @@ case "$1" in
   checkout)
     checkout "${@}"
   ;;
+  working-on)
+    echo "${CURRENT_WORK_HEAD}"
+  ;;
   *)
     echo "unrecognized options: $1" >&2
     exit 1
