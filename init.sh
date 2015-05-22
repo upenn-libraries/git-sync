@@ -3,6 +3,8 @@
 SYNC_DIR=$( cd $(dirname $0) && pwd -L )
 
 WORK_BRANCH="work"
+WORK_HEAD_FILE="$SYNC_DIR/WORK_HEAD"
+
 
 die() {
   echo "$1" >&2
@@ -10,11 +12,13 @@ die() {
 }
 
 create-work-branch() {
-    if ! git rev-parse "refs/heads/$WORK_BRANCH" >/dev/null 2>&1; then
-      git --work-tree="../" checkout -b "$WORK_BRANCH" || die "failed checkout -b ($PWD)"
-    else
-      git --work-tree="../" checkout "$WORK_BRANCH" || die "failed checkout ($PWD)"
-    fi
+  branch_name="$(git symbolic-ref HEAD 2>/dev/null)" || die "no branch found; checkout a branch and re-init"
+
+  if ! git rev-parse "refs/heads/$WORK_BRANCH" >/dev/null 2>&1; then
+    git --work-tree="../" branch "$WORK_BRANCH" "$branch_name" || die "failed checkout -b ($PWD)"
+  fi
+  git --work-tree="../" checkout "$WORK_BRANCH" || die "failed checkout ($PWD)"
+  echo "$branch_name" > "$WORK_HEAD_FILE"
 }
 
 (
