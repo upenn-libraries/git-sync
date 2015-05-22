@@ -42,6 +42,7 @@ case "$1" in
     rmdir "${LOCK_DIR}"
   ;;
   checkout)
+    shift
     checkout "${@}"
   ;;
   working-on)
