@@ -14,9 +14,10 @@ die() {
 
 checkout() {
   git sync lock
-  local ref="refs/heads/$1"
+  local ref=
   if [ "$1" = "-b" ]; then
     shift
+    local ref="refs/heads/$1"
     git branch "${ref#refs/heads/}" "$CURRENT_WORK_HEAD"
   else
     ref="$(git rev-parse --symbolic-full-name "$1")"
