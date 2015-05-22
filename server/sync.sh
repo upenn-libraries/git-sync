@@ -26,7 +26,7 @@ checkout() {
       die "ref \"$1\" not found"
     fi
     git checkout "$ref" # ensure local branch exists
-    ref="$(git rev-parse --sybolic-full-name HEAD)"
+    ref="$(git rev-parse --symbolic-full-name HEAD)"
   fi
   git checkout "$WORK_BRANCH"
   git reset --hard "$ref"
