@@ -14,3 +14,14 @@ Git is used on the workstation essentially as a version-aware runtime environmen
 and for wrapping calls to run a handful of the simplest git commands on the server. This standardizes the toolset 
 needed for deploying synchronization solutions, and provides convenient workflow hooks (e.g., a post-update git hook 
 for re-bundling javascript files on pushing incremental changes to the server for evaluation).
+
+## Installation
+### Server
+Clone the git-sync project into ./.git/sync (the .git directory of your project) on the server. 
+
+Run `./.git/sync/init.sh server`
+
+### Client
+Clone your project from your server repository (see above) to the client machine.
+
+Run `./.git/sync/init.sh client`
