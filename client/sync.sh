@@ -39,14 +39,18 @@ to overwrite local work branch (for $LOCAL_WORK_BRANCH)"
 case "$1" in
    update)
      # pass through to server update script
+     REMOTE_UPDATE_SCRIPT="sync/server/update.sh"
      shift
    ;;
    force-local-update)
      # pass through to server update script
      update-local --force
+     exit
    ;;
    checkout)
-     #TODO pass through to server sync script
+     REMOTE_UPDATE_SCRIPT="sync/server/sync.sh"
+     FORCE_ARG="--force"
+     #pass through to server sync script
    ;;
    working-on)
      if [ "$2" = "--remote" ]; then
@@ -70,7 +74,6 @@ esac
 REMOTE_URL=$(git config --get remote.origin.url)
 SSH_CONNECT="${REMOTE_URL%:*}"
 REMOTE_PATH="${REMOTE_URL#*:}"
-REMOTE_UPDATE_SCRIPT="sync/server/update.sh"
 
 if [ -z "$SSH_CONNECT" ]; then
   ( cd "$REMOTE_PATH" && "${GIT_DIR:-./.git}/$REMOTE_UPDATE_SCRIPT" "${@}" ) > >(record-working) || die "local remote command failed"
@@ -85,4 +88,4 @@ else
   ssh "$SSH_CONNECT" "cd "$REMOTE_PATH" && "\${GIT_DIR:-./.git}/$REMOTE_UPDATE_SCRIPT" "${args[@]}"" > >(record-working) || die "remote command failed"
 fi
 
-update-local
+update-local "$FORCE_ARG"
