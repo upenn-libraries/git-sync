@@ -3,11 +3,15 @@
 SYNC_DIR="$( cd $(dirname $0) && cd ../ && pwd -L )"
 WORK_HEAD_FILE="${SYNC_DIR}/WORK_HEAD"
 
-DEV_BRANCH="$(cat "$WORK_HEAD_FILE")"
+DEV_BRANCH="$(git sync working-on)"
 
 die() {
   echo "$1" >&2
   exit 1
+}
+
+echo-working-on() {
+  echo "working-on: $DEV_BRANCH"
 }
 
 if [ $# -gt 1 ]; then
@@ -23,12 +27,14 @@ git sync lock
 if [ -z "$COMMIT_MESSAGE" ]; then
   if [ "$(git log --oneline "${WORK_BRANCH}..${DEV_BRANCH}" | wc -l)" -lt 1 ]; then
     git sync unlock
+    echo-working-on
     die "up-to-date, nothing to do"
   fi
   COMMIT_MESSAGE="update auto-message"
 else
   if [ "$(git log --oneline "${WORK_BRANCH}...${DEV_BRANCH}" | wc -l)" -lt 1 ]; then
     git sync unlock
+    echo-working-on
     die "up-to-date, nothing to do"
   fi
 fi
@@ -50,3 +56,4 @@ if [ -n "$1" ]; then
 fi
 git branch -d "$TMP_BRANCH" || die "failed to delete $TMP_BRANCH"
 git sync unlock
+echo-working-on
