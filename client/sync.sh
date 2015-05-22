@@ -9,6 +9,14 @@ die() {
   exit 1
 }
 
+branch_name="$(git symbolic-ref HEAD 2>/dev/null)" ||
+branch_name="(unnamed branch)"     # detached HEAD
+branch_name=${branch_name##refs/heads/}
+
+if [ "$branch_name" != "work" ]; then
+  die "must be on work branch for client sync"
+fi
+
 record-working() {
   tee >(
     local working=$(grep -m 1 '^working-on: ' | cut -d ' ' -f 2)
