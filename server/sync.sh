@@ -25,7 +25,7 @@ checkout() {
       git sync unlock
       die "ref \"$1\" not found"
     fi
-    git checkout "$ref" # ensure local branch exists
+    git checkout "${ref#refs/heads}" # ensure local branch exists
     ref="$(git rev-parse --symbolic-full-name HEAD)"
   fi
   git checkout "$WORK_BRANCH"
